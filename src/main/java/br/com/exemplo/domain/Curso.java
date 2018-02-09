@@ -1,8 +1,11 @@
 package br.com.exemplo.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,9 +14,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Entity
 @Table(name = "cursos",
@@ -39,6 +45,22 @@ public class Curso implements Serializable {
     @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(name = "data_inicio")
     private Date dataInicio;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonIgnoreProperties({"curso"})
+    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL)
+    private List<Videoaula> videoaulas;
+
+    public Curso() {
+        super();
+    }
+
+    public Curso(Long id, String titulo, CargaHoraria cargaHoraria, Date dataInicio) {
+        this.id = id;
+        this.titulo = titulo;
+        this.cargaHoraria = cargaHoraria;
+        this.dataInicio = dataInicio;
+    }
 
     public Long getId() {
         return id;
@@ -70,6 +92,22 @@ public class Curso implements Serializable {
 
     public void setDataInicio(Date dataInicio) {
         this.dataInicio = dataInicio;
+    }
+
+    public List<Videoaula> getVideoaulas() {
+        return videoaulas;
+    }
+
+    public void setVideoaulas(List<Videoaula> videoaulas) {
+        this.videoaulas = videoaulas;
+    }
+
+    public void addVideoaula(Videoaula videoaula) {
+        if (this.videoaulas == null) {
+            this.videoaulas = new ArrayList<>();
+        }
+        videoaula.setCurso(this);
+        this.videoaulas.add(videoaula);
     }
 
     @Override

@@ -9,7 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,58 +19,46 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.exemplo.domain.Curso;
-import br.com.exemplo.service.CursoService;
+import br.com.exemplo.domain.Videoaula;
+import br.com.exemplo.service.VideoaulaService;
 
 @RestController
 @RequestMapping(
-        value = "/cursos",
+        value = "/cursos/{idCurso}/videoaulas",
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
         consumes = MediaType.APPLICATION_JSON_UTF8_VALUE
 )
-public class CursoRestController {
+public class VideoaulaRestController {
 
     @Autowired
-    private CursoService service;
+    private VideoaulaService service;
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{idVideoaula}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void excluir(@PathVariable("id") Long id) {
+    public void excluir(@PathVariable("idCurso") Long idCurso, @PathVariable("idVideoaula") Long idVideoaula) {
 
-        service.delete(id);
+        service.delete(idVideoaula, idCurso);
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{idVideoaula}")
     @ResponseStatus(HttpStatus.OK)
-    public Curso editarDataInicio(@PathVariable("id") Long id, @RequestBody Curso curso) {
+    public Videoaula editar(@PathVariable("idCurso") Long idCurso,
+                            @PathVariable("idVideoaula") Long idVideoaula, @RequestBody Videoaula videoaula) {
 
-        return service.updateDataInicio(id, curso.getDataInicio());
-    }
-
-    @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Curso editar(@PathVariable("id") Long id, @RequestBody Curso curso) {
-
-        service.update(id, curso);
-        return curso;
-    }
-
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Curso getCurso(@PathVariable("id") Long id) {
-
-        return service.findById(id);
+        service.update(idVideoaula, idCurso, videoaula);
+        return videoaula;
     }
 
     @PostMapping
-    public ResponseEntity<Void> salvar(@RequestBody Curso curso) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Void> salvar(@PathVariable("idCurso") Long idCurso, @RequestBody Videoaula videoaula) {
 
-        service.save(curso);
+        service.save(idCurso, videoaula);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(curso.getId())
+                .buildAndExpand(videoaula.getId())
                 .toUri();
 
         return ResponseEntity.created(location).build();
@@ -79,10 +66,17 @@ public class CursoRestController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Curso> listar(@RequestParam(name = "fields", required = false, defaultValue = "") String fields) {
+    public List<Videoaula> listar(@PathVariable("idCurso") Long idCurso,
+                                  @RequestParam(name = "fields", required = false, defaultValue = "") String fields) {
 
-        return fields.equals("videoaulas")
-                ? service.findAll()
-                : service.findAllSemVideoaulas();
+        return service.findAllByCurso(idCurso, fields);
+    }
+
+    @GetMapping("/{idVideoaula}")
+    @ResponseStatus(HttpStatus.OK)
+    public Videoaula getVideoaula(@PathVariable("idCurso") Long idCurso,
+                                  @PathVariable("idVideoaula") Long idVideoaula) {
+
+        return service.findByIdVideoaulaAndIdCurso(idVideoaula, idCurso);
     }
 }

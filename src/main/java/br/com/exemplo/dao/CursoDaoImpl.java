@@ -53,4 +53,12 @@ public class CursoDaoImpl implements CursoDao {
                 .createQuery("select c from Curso c", Curso.class)
                 .getResultList();
     }
+
+    @Override
+    public List<Curso> findAllSemVideoaulas() {
+        String query = "select new Curso(c.id, c.titulo, c.cargaHoraria, c.dataInicio) from Curso c";
+        return entityManager
+                .createQuery(query, Curso.class)
+                .getResultList();
+    }
 }

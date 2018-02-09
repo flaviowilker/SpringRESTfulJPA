@@ -15,4 +15,6 @@ public interface CursoDao {
     Curso findById(Long id);
 
     List<Curso> findAll();
+
+    List<Curso> findAllSemVideoaulas();
 }

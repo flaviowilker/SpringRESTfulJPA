@@ -22,6 +22,12 @@ public class CursoServiceImpl implements CursoService {
     public void save(Curso curso) {
 
         dao.save(curso);
+
+        if (curso.getVideoaulas() != null) {
+            curso.getVideoaulas()
+                    .parallelStream()
+                    .forEach(curso::addVideoaula);
+        }
     }
 
     @Override
@@ -55,6 +61,12 @@ public class CursoServiceImpl implements CursoService {
         Curso curso = dao.findById(idValido(id));
         curso.setDataInicio(dataInicio);
         return curso;
+    }
+
+    @Override @Transactional(readOnly = true)
+    public List<Curso> findAllSemVideoaulas() {
+
+        return dao.findAllSemVideoaulas();
     }
 
     private Long idValido(Long id) {
