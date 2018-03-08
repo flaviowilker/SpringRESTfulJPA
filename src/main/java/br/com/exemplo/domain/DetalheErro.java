@@ -8,8 +8,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DetalheErro implements Serializable {
+	
+	private static final long serialVersionUID = -6011309641054840852L;
 
-    private Integer statusCode;
+	private Integer statusCode;
 
     private String statusMessage;
 

@@ -30,8 +30,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
         }
 )
 public class Curso implements Serializable {
+	
+	private static final long serialVersionUID = -3576808278289357827L;
 
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

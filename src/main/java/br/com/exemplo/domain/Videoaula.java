@@ -18,8 +18,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @Entity
 @Table(name = "videoaulas")
 public class Videoaula implements Serializable {
+	
+	private static final long serialVersionUID = 6986851854955793602L;
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 60)
