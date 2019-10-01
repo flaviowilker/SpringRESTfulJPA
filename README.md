@@ -11,7 +11,7 @@ Para iniciar o projeto deve ser adicionado em um servidor tomcat (7 ou 8).
   - Log4j
   - Jackson
   
-# Exemplo de metodos HTTP para RESTful
+# Exemplo de metodos HTTP para REST
 
 | CRUD | HTTP | URL | Header | Body |
 | ------ | ------ | ------ | ------ | ------ |
