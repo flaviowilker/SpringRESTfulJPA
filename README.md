@@ -1,4 +1,4 @@
-# Spring RESTful JPA/Hibernate
+# Spring REST JPA/Hibernate
 
 WebService de exemplo para estudos.
  
